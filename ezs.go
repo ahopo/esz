@@ -35,9 +35,16 @@ type EZS struct {
 //			Age  int
 //		}
 //
+//	Parameters
+//		_string interface{}
+//			- The struct pass as arguments.
+//		tagname
+//			- The tag declared in the struct
+//			  e.g  Id   int    `db:"integer, Auto increment primary"` => db
+//
 //		func main() {
 //			p := new(Person)
-//			pdata := ezs.New(Person, "")
+//			pdata := ezs.New(Person, "db")
 //			fmt.Println(pdata[0].Key)       // => Id
 //			fmt.Println(pdata[0].Value)     // => an interface inside the real value
 //			fmt.Println(pdata[0].Attribute) // => "Auto increment primary"
@@ -45,8 +52,8 @@ type EZS struct {
 //			fmt.Println(pdata[0].DataType)  // => int
 //		}
 //
-func New(s interface{}, tagname string) []EZS {
-	return _map(s, tagname)
+func New(_struct interface{}, tagname string) []EZS {
+	return _map(_struct, tagname)
 }
 
 func _map(_struct interface{}, tag_name string) (ezStruct []EZS) {
