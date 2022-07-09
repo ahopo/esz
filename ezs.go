@@ -1,8 +1,8 @@
 // Installation
 //	 Terminal
-//		go get "github/ahopo/ezs"
+//		go get "github.com/ahopo/ezs"
 //	 To your project
-// 		import "github/ahopo/ezs"
+// 		import "github.com/ahopo/ezs"
 package ezs
 
 import (
@@ -27,23 +27,23 @@ type EZS struct {
 	DataType  string
 }
 
-// Return []EZS struct
 //	Usage:
-//	type Person struct {
-//		Id int `db:"integer, Auto increment primary"`
-// 		Name string `db:"varchar(255)"`
-// 		Age int
-// }
+//		type Person struct {
+//			Id   int    `db:"integer, Auto increment primary"`
+//			Name string `db:"varchar(255)"`
+//			Age  int
+//		}
 //
-// 	func main(){
-//		p:=new(Person)
-//		pdata:=ezs.New(Person,"")
-//		fmt.Println(pdata[0].Key) => Id
-// 		fmt.Println(pdata[0].Value) => an interface inside the real value
-// 		fmt.Println(pdata[0].Attribute) => "Auto increment primary"
-// 		fmt.Println(pdata[0].TagValue) => "integer"
-// 		fmt.Println(pdata[0].DataType) => int
-//	}
+//		func main() {
+//			p := new(Person)
+//			pdata := ezs.New(Person, "")
+//			fmt.Println(pdata[0].Key)       // => Id
+//			fmt.Println(pdata[0].Value)     // => an interface inside the real value
+//			fmt.Println(pdata[0].Attribute) // => "Auto increment primary"
+//			fmt.Println(pdata[0].TagValue)  // => "integer"
+//			fmt.Println(pdata[0].DataType)  // => int
+//		}
+//
 func New(s interface{}, tagname string) []EZS {
 	return _map(s, tagname)
 }
