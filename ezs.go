@@ -20,11 +20,14 @@ import (
 //			e.g ID int `db:"integer, Auto increment primary"` => the "integer"
 // 	DataType
 //			e.g ID int `db:"integer, Auto increment primary"` => the int
+// 	Tag
+//			e.g ID int `db:"integer, Auto increment primary"` => the db
 type EZS struct {
 	Key       string
 	Value     interface{}
 	Attribute string
 	TagValue  string
+	Tag       string
 	DataType  string
 }
 
@@ -47,16 +50,17 @@ type EZS struct {
 //			pdata := ezs.New(Person, "db")
 //			fmt.Println(pdata[0].Key)       // => Id
 //			fmt.Println(pdata[0].Value)     // => an interface inside the real value
-//			fmt.Println(pdata[0].Attribute) // => "Auto increment primary"
-//			fmt.Println(pdata[0].TagValue)  // => "integer"
 //			fmt.Println(pdata[0].DataType)  // => int
+//			fmt.Println(pdata[0].Tag)  		// => db
+//			fmt.Println(pdata[0].TagValue)  // => "integer"
+//			fmt.Println(pdata[0].Attribute) // => "Auto increment primary"
 //		}
 //
-func New(_struct interface{}, tagname string) []EZS {
-	return _map(_struct, tagname)
+func New(_struct interface{}) []EZS {
+	return _map(_struct)
 }
 
-func _map(_struct interface{}, tag_name string) (ezStruct []EZS) {
+func _map(_struct interface{}) (ezStruct []EZS) {
 	val := reflect.ValueOf(_struct).Elem()
 
 	for i := 0; i < val.NumField(); i++ {
@@ -70,9 +74,8 @@ func _map(_struct interface{}, tag_name string) (ezStruct []EZS) {
 		_s.TagValue = ""
 		_s.Attribute = ""
 		_s.DataType = fmt.Sprintf("%v", field.Type.Kind())
-
-		tagdata := strings.Split(field.Tag.Get(tag_name), ",")
-
+		_s.Tag = strings.Split(string(field.Tag), ":")[0]
+		tagdata := strings.Split(field.Tag.Get(_s.Tag), ",")
 		if len(tagdata) > 0 {
 			_s.TagValue = tagdata[0]
 		}
