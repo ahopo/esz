@@ -6,6 +6,7 @@
 package ezs
 
 import (
+	"fmt"
 	"reflect"
 	"strings"
 )
@@ -61,13 +62,15 @@ func _map(_struct interface{}, tag_name string) (ezStruct []EZS) {
 		_s.Value = val.Field(i).Interface()
 		_s.TagValue = ""
 		_s.Attribute = ""
+		_s.DataType = fmt.Sprintf("%v", field.Type.Kind())
 
 		tagdata := strings.Split(field.Tag.Get(tag_name), ",")
-		if len(tagdata) > 1 {
+
+		if len(tagdata) > 0 {
 			_s.TagValue = tagdata[0]
 		}
-		if len(tagdata) > 2 {
-			_s.Attribute = strings.Join(tagdata[2:], " ")
+		if len(tagdata) > 1 {
+			_s.Attribute = strings.Join(tagdata[1:], " ")
 		}
 		ezStruct = append(ezStruct, *_s)
 	}
