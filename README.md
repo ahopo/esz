@@ -1,2 +1,2 @@
-# esz (Easy Struct) 
+# ezs (Easy Struct) 
 ### Documentation : Go to https://github.com/ahopo/ezs
