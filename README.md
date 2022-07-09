@@ -1,0 +1,2 @@
+# esz
+easy struct
