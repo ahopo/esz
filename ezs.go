@@ -22,13 +22,17 @@ import (
 //			e.g ID int `db:"integer, Auto increment primary"` => the int
 // 	Tag
 //			e.g ID int `db:"integer, Auto increment primary"` => the db
-type EZS struct {
+type field_data struct {
 	Key       string
 	Value     interface{}
 	Attribute string
 	TagValue  string
 	Tag       string
 	DataType  string
+}
+type Field struct {
+	Name string
+	Data []field_data
 }
 
 //	Usage:
@@ -47,24 +51,28 @@ type EZS struct {
 //
 //		func main() {
 //			p := new(Person)
-//			pdata := ezs.New(Person, "db")
-//			fmt.Println(pdata[0].Key)       // => Id
-//			fmt.Println(pdata[0].Value)     // => an interface inside the real value
-//			fmt.Println(pdata[0].DataType)  // => int
-//			fmt.Println(pdata[0].Tag)  		// => db
-//			fmt.Println(pdata[0].TagValue)  // => "integer"
-//			fmt.Println(pdata[0].Attribute) // => "Auto increment primary"
+//			p := ezs.Get(Person)
+//			fmt.Println(p.Name) 			 // => Person
+//			fmt.Println(p.Data[0].Key)       // => Id
+//			fmt.Println(p.Data[0].Value)     // => an interface inside the real value
+//			fmt.Println(p.Data[0].DataType)  // => int
+//			fmt.Println(p.Data[0].Tag)  	 // => db
+//			fmt.Println(p.Data[0].TagValue)  // => "integer"
+//			fmt.Println(p.Data[0].Attribute) // => "Auto increment primary"
 //		}
 //
-func New(_struct interface{}) []EZS {
-	return _map(_struct)
+func Get(_struct interface{}) Field {
+	field := new(Field)
+	field.Data = _map(_struct)
+	field.Name = getName(_struct)
+	return *field
 }
 
-func _map(_struct interface{}) (ezStruct []EZS) {
+func _map(_struct interface{}) (ezStruct []field_data) {
 	val := reflect.ValueOf(_struct).Elem()
 
 	for i := 0; i < val.NumField(); i++ {
-		_s := new(EZS)
+		_s := new(field_data)
 
 		key := val.Type().Field(i).Name
 		field, _ := val.Type().FieldByName(key)
@@ -86,4 +94,7 @@ func _map(_struct interface{}) (ezStruct []EZS) {
 	}
 
 	return ezStruct
+}
+func getName(_struct interface{}) string {
+	return reflect.TypeOf(_struct).Elem().Name()
 }
